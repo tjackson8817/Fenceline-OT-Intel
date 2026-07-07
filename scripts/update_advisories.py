@@ -1,3 +1,4 @@
+"""
 Fenceline OT advisory updater.
 
 Fetches CISA's ICS advisories feed, finds items not already in
