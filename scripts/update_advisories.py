@@ -144,7 +144,7 @@ def row_to_source_text(row):
 def enrich(raw_text, source_url):
     body = {
         "model": MODEL,
-        "max_tokens": 1000,
+        "max_tokens": 2048,
         "system": SYSTEM_PROMPT,
         "messages": [{"role": "user", "content": f"Source URL: {source_url}\n\n{raw_text[:12000]}"}],
     }
@@ -161,8 +161,24 @@ def enrich(raw_text, source_url):
     resp.raise_for_status()
     data = resp.json()
     text = "".join(block.get("text", "") for block in data.get("content", []))
-    text = re.sub(r"^```json|```$", "", text.strip(), flags=re.MULTILINE).strip()
-    return json.loads(text)
+    text = text.strip()
+
+    # Best-effort cleanup: strip code fences if present, then fall back to
+    # extracting the outermost {...} span in case of stray preamble text.
+    text = re.sub(r"^```json|^```|```$", "", text, flags=re.MULTILINE).strip()
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError as exc:
+        start = text.find("{")
+        end = text.rfind("}")
+        if start != -1 and end != -1 and end > start:
+            try:
+                return json.loads(text[start:end + 1])
+            except json.JSONDecodeError:
+                pass
+        # Surface a useful snippet for debugging rather than just the parse error
+        snippet = text[:300].replace("\n", " ")
+        raise ValueError(f"{exc} -- raw response started with: {snippet!r}") from exc
 
 
 def main():
