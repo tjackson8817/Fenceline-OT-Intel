@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fenceline — OT cyber threat intelligence</title>
+<style>
+  :root {
+    --bg: #f5f6f4;
+    --surface: #ffffff;
+    --surface-2: #eef0ed;
+    --ink: #1c2124;
+    --ink-soft: #565f5f;
+    --ink-mute: #8a928f;
+    --border: #dcdfda;
+    --accent: #1f4b5c;
+    --critical: #b3261e; --critical-bg: #fbeceb;
+    --high: #a4650a; --high-bg: #faf0e0;
+    --medium: #2f6690; --medium-bg: #e8eef3;
+    --low: #5f6864; --low-bg: #eceeec;
+    --mono: "SFMono-Regular", ui-monospace, Menlo, Consolas, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --radius: 10px;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--sans); line-height: 1.5; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 2.5rem 1.5rem 5rem; }
+
+  .masthead { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 1rem; }
+  .wordmark { display: flex; align-items: baseline; gap: 0.6rem; }
+  .wordmark h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.02em; margin: 0; font-family: Georgia, "Times New Roman", serif; }
+  .wordmark span.tag { font-size: 13px; color: var(--ink-soft); font-family: var(--mono); }
+  .meta-line { font-size: 13px; color: var(--ink-mute); text-align: right; display: flex; align-items: center; gap: 10px; }
+  .refresh-btn { font-size: 13px; padding: 5px 12px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); color: var(--ink-soft); cursor: pointer; }
+  .refresh-btn:hover { border-color: var(--accent); }
+
+  .fence { display: flex; gap: 3px; margin: 1rem 0 1.75rem; height: 14px; align-items: flex-end; }
+  .fence span { width: 3px; background: var(--accent); opacity: 0.35; }
+  .fence span:nth-child(4n) { height: 14px; opacity: 0.7; }
+  .fence span:not(:nth-child(4n)) { height: 8px; }
+
+  .controls { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 1.75rem; }
+  .filter-group { display: flex; gap: 6px; flex-wrap: wrap; }
+  .chip { font-size: 13px; padding: 6px 14px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); color: var(--ink-soft); cursor: pointer; }
+  .chip:hover { border-color: var(--accent); }
+  .chip.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  .view-toggle { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink-soft); }
+  .switch { width: 38px; height: 21px; border-radius: 999px; background: var(--border); position: relative; cursor: pointer; border: none; }
+  .switch.on { background: var(--accent); }
+  .switch .knob { position: absolute; top: 2px; left: 2px; width: 17px; height: 17px; border-radius: 50%; background: #fff; transition: left 0.15s ease; }
+  .switch.on .knob { left: 19px; }
+
+  .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 2rem; }
+  .kpi { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.1rem; }
+  .kpi .label { font-size: 12.5px; color: var(--ink-mute); margin: 0 0 6px; }
+  .kpi .value { font-size: 25px; font-weight: 700; margin: 0; letter-spacing: -0.01em; }
+
+  .section-title { font-size: 14px; font-weight: 600; margin: 0 0 12px; display: flex; align-items: center; justify-content: space-between; }
+  .section-title .count { font-weight: 400; color: var(--ink-mute); font-size: 13px; }
+  .cards { display: flex; flex-direction: column; gap: 12px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 1.1rem 1.3rem; }
+  .badge-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+  .badge { font-size: 11.5px; padding: 3px 10px; border-radius: 6px; font-weight: 600; }
+  .badge.critical { background: var(--critical-bg); color: var(--critical); }
+  .badge.high { background: var(--high-bg); color: var(--high); }
+  .badge.medium { background: var(--medium-bg); color: var(--medium); }
+  .badge.low { background: var(--low-bg); color: var(--low); }
+  .badge.sector { background: var(--surface-2); color: var(--ink-soft); font-weight: 500; }
+  .badge.purdue { background: var(--surface-2); color: var(--ink-mute); font-weight: 500; font-family: var(--mono); font-size: 11px; }
+
+  .headline { font-size: 15.5px; font-weight: 600; margin: 0 0 5px; }
+  .impact { font-size: 13.5px; color: var(--ink-soft); margin: 0 0 12px; }
+
+  .tech { border-top: 1px solid var(--border); padding-top: 10px; }
+  .tech-label { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-mute); margin: 0 0 8px; }
+  .tech-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; font-size: 12px; font-family: var(--mono); color: var(--ink-soft); }
+  .tech-grid .k { color: var(--ink-mute); font-family: var(--sans); font-size: 11px; display: block; margin-bottom: 2px; }
+  .tech-grid a { color: var(--accent); text-decoration: none; }
+  .tech-grid a:hover { text-decoration: underline; }
+  .mitigation { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
+  .mitigation .k { font-size: 11px; color: var(--ink-mute); }
+  .mitigation p { font-size: 13px; color: var(--ink-soft); margin: 4px 0 0; }
+  .conf-tag { font-size: 10.5px; padding: 1px 7px; border-radius: 5px; margin-left: 6px; font-weight: 600; }
+  .conf-tag.vendor-confirmed { background: var(--low-bg); color: var(--ink-soft); }
+  .conf-tag.suggested { background: var(--surface-2); color: var(--ink-mute); }
+
+  .empty { text-align: center; padding: 3rem 1rem; color: var(--ink-mute); font-size: 14px; }
+  footer { margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid var(--border); font-size: 12px; color: var(--ink-mute); }
+  footer code { font-family: var(--mono); background: var(--surface-2); padding: 1px 5px; border-radius: 4px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="masthead">
+    <div class="wordmark">
+      <h1>Fenceline</h1>
+      <span class="tag">OT cyber intel, translated</span>
+    </div>
+    <div class="meta-line">
+      <span id="lastUpdated">Loading…</span>
+      <button class="refresh-btn" onclick="load()">Refresh</button>
+    </div>
+  </div>
+  <div class="fence" id="fence"></div>
+
+  <div class="controls">
+    <div class="filter-group" id="severityFilters"></div>
+    <div class="filter-group" id="sectorFilters"></div>
+    <div class="view-toggle">
+      Analyst detail
+      <button class="switch on" id="viewSwitch" onclick="toggleView()"><span class="knob"></span></button>
+    </div>
+  </div>
+
+  <div class="kpi-row" id="kpiRow"></div>
+
+  <p class="section-title">Advisories <span class="count" id="cardCount"></span></p>
+  <div class="cards" id="cards"><div class="empty">Loading advisories…</div></div>
+
+  <footer>
+    Live data from <code>data/advisories.json</code>, updated by a scheduled GitHub Action that pulls CISA's ICS advisory feed
+    and runs new items through a Claude enrichment prompt. Purdue level reflects a typical deployment layer for the product
+    class, not a confirmed network position. This page checks for new data automatically every 15 minutes, or use Refresh.
+  </footer>
+</div>
+
+<script>
+let ADVISORIES = [];
+let activeSeverity = "all";
+let activeSector = "all";
+let analystView = true;
+
+function renderFence() {
+  document.getElementById("fence").innerHTML = Array.from({length: 48}).map(() => "<span></span>").join("");
+}
+
+function renderKPIs() {
+  const total = ADVISORIES.length;
+  const critical = ADVISORIES.filter(a => a.severity_tier === "critical").length;
+  const sectors = new Set(ADVISORIES.map(a => a.sector)).size;
+  document.getElementById("kpiRow").innerHTML = `
+    <div class="kpi"><p class="label">Total tracked</p><p class="value">${total}</p></div>
+    <div class="kpi"><p class="label">Critical</p><p class="value">${critical}</p></div>
+    <div class="kpi"><p class="label">Sectors represented</p><p class="value">${sectors}</p></div>
+  `;
+}
+
+function renderFilters() {
+  const severities = ["all", "critical", "high", "medium", "low"];
+  const sectors = ["all", ...new Set(ADVISORIES.map(a => a.sector).filter(Boolean))];
+
+  document.getElementById("severityFilters").innerHTML = severities.map(s =>
+    `<button class="chip ${activeSeverity===s?'active':''}" onclick="setSeverity('${s}')">${s==="all"?"All severities":s.charAt(0).toUpperCase()+s.slice(1)}</button>`
+  ).join("");
+
+  document.getElementById("sectorFilters").innerHTML = sectors.map(s =>
+    `<button class="chip ${activeSector===s?'active':''}" onclick="setSector('${s.replace(/'/g,"\\'")}')">${s==="all"?"All sectors":s}</button>`
+  ).join("");
+}
+
+function setSeverity(s) { activeSeverity = s; renderFilters(); renderCards(); }
+function setSector(s) { activeSector = s; renderFilters(); renderCards(); }
+function toggleView() {
+  analystView = !analystView;
+  document.getElementById("viewSwitch").classList.toggle("on", analystView);
+  renderCards();
+}
+
+function cardHTML(a) {
+  const attack = a.attack_ics_technique
+    ? `<a href="${a.attack_ics_technique.url}" target="_blank" rel="noopener">${a.attack_ics_technique.id} ${a.attack_ics_technique.name} ↗</a>`
+    : "No clear technique match";
+
+  const tech = analystView ? `
+    <div class="tech">
+      <p class="tech-label">Technical backing</p>
+      <div class="tech-grid">
+        <div><span class="k">CVE</span>${(a.cve_ids||[]).join(", ") || "—"}</div>
+        <div><span class="k">Vendor / product</span>${a.vendor||"—"} ${a.product||""}</div>
+        <div><span class="k">ATT&amp;CK ICS</span>${attack}</div>
+        <div><span class="k">Exploit maturity</span>${a.exploit_maturity||"—"}</div>
+        <div><span class="k">CVSS / OT risk</span>${a.cvss_score ?? "—"} / ${a.ot_risk_rating||"—"}</div>
+        <div><span class="k">Patch status</span>${a.patch_status||"—"}</div>
+      </div>
+      <div class="mitigation">
+        <span class="k">Known mitigation<span class="conf-tag ${a.mitigation_confidence}">${a.mitigation_confidence||"suggested"}</span></span>
+        <p>${a.known_mitigation||"Not yet available."}</p>
+      </div>
+    </div>` : "";
+
+  return `
+  <div class="card">
+    <div class="badge-row">
+      <span class="badge ${a.severity_tier}">${(a.severity_tier||"unknown").charAt(0).toUpperCase()+(a.severity_tier||"unknown").slice(1)}</span>
+      <span class="badge sector">${a.sector||"Unclassified"}</span>
+      <span class="badge purdue">${a.purdue_level_estimate||"Layer unknown"}</span>
+    </div>
+    <p class="headline">${a.exec_headline||"(no summary)"}</p>
+    <p class="impact">${a.business_impact||""}</p>
+    ${tech}
+  </div>`;
+}
+
+function renderCards() {
+  const filtered = ADVISORIES.filter(a =>
+    (activeSeverity === "all" || a.severity_tier === activeSeverity) &&
+    (activeSector === "all" || a.sector === activeSector)
+  );
+  document.getElementById("cardCount").textContent = `(${filtered.length})`;
+  document.getElementById("cards").innerHTML = filtered.length
+    ? filtered.map(cardHTML).join("")
+    : `<div class="empty">No advisories match these filters yet. If this is a brand new setup, wait for the first scheduled run or trigger the workflow manually.</div>`;
+}
+
+async function load() {
+  document.getElementById("lastUpdated").textContent = "Checking…";
+  try {
+    const res = await fetch("data/advisories.json", { cache: "no-store" });
+    ADVISORIES = await res.json();
+    renderKPIs();
+    renderFilters();
+    renderCards();
+    document.getElementById("lastUpdated").textContent = "Updated " + new Date().toLocaleString();
+  } catch (e) {
+    document.getElementById("lastUpdated").textContent = "Couldn't load data";
+  }
+}
+
+renderFence();
+load();
+setInterval(load, 15 * 60 * 1000); // auto-check every 15 minutes
+</script>
+</body>
+</html>
