@@ -1,24 +1,33 @@
 """
 Fenceline OT advisory updater.
 
-Fetches CISA's ICS advisories feed, finds items not already in
-data/advisories.json, runs each through the Claude enrichment prompt,
-and writes the results back. Designed to run on a schedule via GitHub
-Actions (see .github/workflows/update-advisories.yml).
+CISA's own site blocks automated/datacenter requests (bot detection), so
+this pulls from the ICS Advisory Project's community-maintained CSV mirror
+of CISA ICS Advisories instead:
+https://github.com/icsadvprj/ICS-Advisory-Project
+
+Each new row is run through the Claude enrichment prompt, using the
+structured fields already present in the CSV (title, vendor, product, CVE,
+CVSS, sector, CWE) as the source text, and writes the results to
+data/advisories.json. Designed to run on a schedule via GitHub Actions
+(see .github/workflows/update-advisories.yml).
 """
 
+import csv
+import io
 import json
 import os
 import re
 import sys
-import xml.etree.ElementTree as ET
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 import requests
 
-FEED_URL = "https://www.cisa.gov/cybersecurity-advisories/ics-advisories.xml"
+CSV_URL = "https://raw.githubusercontent.com/icsadvprj/ICS-Advisory-Project/main/ICS-CERT_ADV/CISA_ICS_ADV_Master.csv"
 DATA_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "advisories.json")
 MAX_RECORDS = 150
+MAX_NEW_PER_RUN = 15          # cap API calls per run
+LOOKBACK_DAYS = 60            # ignore advisories older than this on a fresh backlog
 MODEL = "claude-sonnet-5"
 API_KEY = os.environ.get("ANTHROPIC_API_KEY")
 
@@ -51,6 +60,9 @@ Rules:
   the canonical MITRE URL. If no clear match, return null for this field.
 - severity_tier is one of: critical, high, medium, low -- based on your
   ot_risk_rating, not raw CVSS.
+- The input you receive is a structured summary (title, vendor, product,
+  CVE, CVSS, CWE, sector, dates) rather than the full advisory narrative.
+  Work only from what's given; do not assume additional detail exists.
 - Output ONLY valid JSON matching this schema. No preamble, no markdown
   fences, no commentary:
 
@@ -91,28 +103,42 @@ def save(records):
         json.dump(records, f, indent=2)
 
 
-def fetch_feed_items():
-    resp = requests.get(FEED_URL, timeout=30, headers={"User-Agent": "fenceline-ot-intel/1.0"})
+def fetch_rows():
+    resp = requests.get(CSV_URL, timeout=30)
     resp.raise_for_status()
-    root = ET.fromstring(resp.content)
-    items = []
-    for item in root.findall(".//item"):
-        title = (item.findtext("title") or "").strip()
-        link = (item.findtext("link") or "").strip()
-        guid = (item.findtext("guid") or link).strip()
-        pub_date = (item.findtext("pubDate") or "").strip()
-        description = (item.findtext("description") or "").strip()
-        items.append({"title": title, "link": link, "guid": guid, "pub_date": pub_date, "description": description})
-    return items
+    resp.encoding = "utf-8-sig"
+    reader = csv.DictReader(io.StringIO(resp.text))
+    return list(reader)
 
 
-def fetch_full_advisory_text(url):
+def row_is_recent(row):
+    date_str = (row.get("Original_Release_Date") or "").strip()
+    if not date_str:
+        return True  # if the date is missing, don't silently drop it
     try:
-        resp = requests.get(url, timeout=30, headers={"User-Agent": "fenceline-ot-intel/1.0"})
-        resp.raise_for_status()
-        return resp.text
-    except requests.RequestException:
-        return ""
+        released = datetime.strptime(date_str, "%m/%d/%Y")
+    except ValueError:
+        return True
+    return released >= datetime.now() - timedelta(days=LOOKBACK_DAYS)
+
+
+def row_to_source_text(row):
+    advisory_id = (row.get("ICS-CERT_Number") or "").strip()
+    link = f"https://www.cisa.gov/news-events/ics-advisories/{advisory_id.lower()}" if advisory_id else ""
+    lines = [
+        f"Advisory ID: {advisory_id}",
+        f"Title: {row.get('ICS-CERT_Advisory_Title', '')}",
+        f"Vendor: {row.get('Vendor', '')}",
+        f"Product: {row.get('Product', '')}",
+        f"Affected versions: {row.get('Products_Affected', '')}",
+        f"CVE(s): {row.get('CVE_Number', '')}",
+        f"CVSS score: {row.get('Cumulative_CVSS', '')} ({row.get('CVSS_Severity', '')})",
+        f"CWE(s): {row.get('CWE_Number', '')}",
+        f"Critical infrastructure sector(s): {row.get('Critical_Infrastructure_Sector', '')}",
+        f"Original release date: {row.get('Original_Release_Date', '')}",
+        f"Last updated: {row.get('Last_Updated', '')}",
+    ]
+    return "\n".join(lines), link
 
 
 def enrich(raw_text, source_url):
@@ -145,32 +171,31 @@ def main():
         sys.exit(1)
 
     existing = load_existing()
-    known_guids = {r.get("guid") for r in existing if r.get("guid")}
+    known_ids = {r.get("advisory_row_id") for r in existing if r.get("advisory_row_id")}
 
-    items = fetch_feed_items()
+    rows = fetch_rows()
+    candidates = [
+        row for row in rows
+        if row.get("icsad_ID") not in known_ids and row_is_recent(row)
+    ][:MAX_NEW_PER_RUN]
+
     new_records = []
-
-    for item in items:
-        if item["guid"] in known_guids:
-            continue
-
-        full_text = fetch_full_advisory_text(item["link"]) or item["description"]
-        if not full_text:
-            print(f"Skipping {item['guid']}: no text available", file=sys.stderr)
-            continue
+    for row in candidates:
+        source_text, link = row_to_source_text(row)
+        title = row.get("ICS-CERT_Advisory_Title", "(untitled)")
 
         try:
-            enriched = enrich(full_text, item["link"])
+            enriched = enrich(source_text, link)
         except Exception as exc:  # noqa: BLE001 -- log and continue, don't kill the run
-            print(f"Skipping {item['guid']}: enrichment failed ({exc})", file=sys.stderr)
+            print(f"Skipping {row.get('icsad_ID')} ({title}): enrichment failed ({exc})", file=sys.stderr)
             continue
 
-        enriched["guid"] = item["guid"]
-        enriched["source_url"] = item["link"]
-        enriched["published"] = item["pub_date"]
+        enriched["advisory_row_id"] = row.get("icsad_ID")
+        enriched["source_url"] = link
+        enriched["published"] = row.get("Original_Release_Date", "")
         enriched["fetched_at"] = datetime.now(timezone.utc).isoformat()
         new_records.append(enriched)
-        print(f"Enriched: {item['title']}")
+        print(f"Enriched: {title}")
 
     if not new_records:
         print("No new advisories.")
