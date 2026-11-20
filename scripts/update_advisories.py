@@ -158,7 +158,13 @@ def enrich(raw_text, source_url):
         json=body,
         timeout=60,
     )
-    resp.raise_for_status()
+    if resp.status_code >= 400:
+        # Show the API's own error message (e.g. "credit balance is too low"), not just the status code
+        try:
+            detail = resp.json().get("error", {}).get("message") or resp.text
+        except ValueError:
+            detail = resp.text
+        raise RuntimeError(f"HTTP {resp.status_code} from Anthropic API: {detail[:300]}")
     data = resp.json()
     text = "".join(block.get("text", "") for block in data.get("content", []))
     text = text.strip()
@@ -196,6 +202,7 @@ def main():
     ][:MAX_NEW_PER_RUN]
 
     new_records = []
+    failures = 0
     for row in candidates:
         source_text, link = row_to_source_text(row)
         title = row.get("ICS-CERT_Advisory_Title", "(untitled)")
@@ -204,6 +211,7 @@ def main():
             enriched = enrich(source_text, link)
         except Exception as exc:  # noqa: BLE001 -- log and continue, don't kill the run
             print(f"Skipping {row.get('icsad_ID')} ({title}): enrichment failed ({exc})", file=sys.stderr)
+            failures += 1
             continue
 
         enriched["advisory_row_id"] = row.get("icsad_ID")
@@ -212,6 +220,11 @@ def main():
         enriched["fetched_at"] = datetime.now(timezone.utc).isoformat()
         new_records.append(enriched)
         print(f"Enriched: {title}")
+
+    if candidates and failures == len(candidates):
+        # Every enrichment failed: fail the run (red X in GitHub Actions) instead of reporting success
+        print(f"ERROR: all {failures} enrichment calls failed; see the messages above.", file=sys.stderr)
+        sys.exit(1)
 
     if not new_records:
         print("No new advisories.")
