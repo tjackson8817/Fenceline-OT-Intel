@@ -1,5 +1,283 @@
 [
   {
+    "exec_headline": "A security flaw in a Siemens edge computing device could let an attacker run unauthorized commands on the system, potentially disrupting operations or compromising connected data.",
+    "business_impact": "If exploited, this issue could allow an outside party to take unauthorized control actions on affected equipment, which may interrupt production, affect data integrity, or create a foothold for further compromise of connected systems.",
+    "sector": "Critical Manufacturing; Energy; Information Technology",
+    "cve_ids": [
+      "CVE-2026-109830"
+    ],
+    "vendor": "Siemens",
+    "product": "Siemens meta-iot2050",
+    "attack_ics_technique": null,
+    "exploit_maturity": "No known public exploit or evidence of active exploitation reported in available advisory information.",
+    "cvss_score": 7.3,
+    "ot_risk_rating": "High",
+    "ot_risk_rationale": "The affected product class (an edge computing/IoT gateway device) is often IT-adjacent or internet-connected for cloud and remote management functions, and a command-injection flaw (CWE-78) could allow arbitrary command execution with direct consequences for system integrity and availability, though no active exploitation is currently reported.",
+    "patch_status": "Not specified in available advisory information; consult the Siemens ProductCERT advisory for current remediation guidance.",
+    "known_mitigation": "Restrict network access to the device's management and administrative interfaces to trusted hosts only, disable any unused remote-management or network-facing services, and monitor the device for unexpected command execution or configuration changes until a vendor patch is applied.",
+    "mitigation_confidence": "suggested",
+    "purdue_level_estimate": "Typically Level 3, edge computing/gateway layer bridging OT and IT networks",
+    "severity_tier": "high",
+    "advisory_row_id": "4110",
+    "source_url": "https://www.cisa.gov/news-events/ics-advisories/icsa-26-321-11",
+    "published": "11/17/2026",
+    "fetched_at": "2026-11-20T16:17:21.755437+00:00"
+  },
+  {
+    "exec_headline": "A critical software flaw in Siemens building management and power-grid analysis systems could let a remote attacker crash or take over the affected system.",
+    "business_impact": "If exploited, an outside attacker could disrupt the software used to monitor and manage building systems or power grid operations, potentially causing service outages or loss of situational awareness for critical infrastructure operators.",
+    "sector": "Critical Manufacturing; Energy; Information Technology",
+    "cve_ids": [
+      "CVE-2026-111497"
+    ],
+    "vendor": "Siemens",
+    "product": "Desigo CC family (V8, V9), Gridscale X DSA (<5.4), Gridscale X PSS\u00aeE",
+    "attack_ics_technique": null,
+    "exploit_maturity": "Not stated in source material; no public exploitation reported in the advisory summary provided.",
+    "cvss_score": 9.8,
+    "ot_risk_rating": "High",
+    "ot_risk_rationale": "No known public exploitation has been reported, and the affected products (building automation and power-system engineering/planning software) are typically deployed on IT-adjacent supervisory or engineering networks rather than directly in real-time safety control loops; however, the out-of-bounds write flaw could enable remote code execution or crash, threatening the integrity and availability of monitoring and grid-planning functions.",
+    "patch_status": "Not stated in the provided source; consult the official Siemens/CISA advisory for patch availability.",
+    "known_mitigation": "Restrict network access to Desigo CC and Gridscale X systems to trusted engineering/management networks only, place them behind firewalls or VPNs separate from business IT networks, and monitor for anomalous traffic or unexpected process crashes until a vendor patch is applied.",
+    "mitigation_confidence": "suggested",
+    "purdue_level_estimate": "Typically Level 2-3, supervisory control (building automation HMI/SCADA) and engineering/planning workstation functions",
+    "severity_tier": "high",
+    "advisory_row_id": "4108",
+    "source_url": "https://www.cisa.gov/news-events/ics-advisories/icsa-26-316-02",
+    "published": "11/12/2026",
+    "fetched_at": "2026-11-20T16:17:42.448377+00:00"
+  },
+  {
+    "exec_headline": "A critical software flaw in Siemens' industrial edge management platform could let an attacker take control of connected manufacturing systems or disrupt operations.",
+    "business_impact": "If exploited, this flaw could allow outside attackers to interfere with the management of plant-floor equipment, potentially causing production outages or loss of control over manufacturing devices, with downstream risk to safety and operational continuity.",
+    "sector": "Critical Manufacturing",
+    "cve_ids": [
+      "CVE-2026-111497"
+    ],
+    "vendor": "Siemens",
+    "product": "Siemens Industrial Edge Management",
+    "attack_ics_technique": null,
+    "exploit_maturity": "Not stated in source; no public exploitation reported in the advisory.",
+    "cvss_score": 9.8,
+    "ot_risk_rating": "Critical",
+    "ot_risk_rationale": "The vulnerability (out-of-bounds write, CVSS 9.8) affects a management platform that includes a cloud-connected component (Industrial Edge Management Cloud), increasing reachability beyond a typical isolated OT network; combined with the severe consequence potential (likely code execution or crash affecting availability/integrity of managed edge devices), this warrants a critical rating even though exploit maturity is not documented.",
+    "patch_status": "Not stated in source; advisory does not confirm whether a fix is available.",
+    "known_mitigation": "Restrict and tightly control network access to Industrial Edge Management components (especially any cloud-connected interfaces such as Industrial Edge Management Cloud), place management systems behind firewalls/VPNs, disable external/cloud connectivity if not operationally required, and monitor management traffic for anomalous activity until a vendor patch is applied.",
+    "mitigation_confidence": "suggested",
+    "purdue_level_estimate": "Typically Level 3, operations/management layer, with potential extension to Level 4/cloud via the Industrial Edge Management Cloud component, making it more IT-adjacent than core control-layer devices.",
+    "severity_tier": "critical",
+    "advisory_row_id": "4107",
+    "source_url": "https://www.cisa.gov/news-events/ics-advisories/icsa-26-316-03",
+    "published": "11/12/2026",
+    "fetched_at": "2026-11-20T16:17:57.970590+00:00"
+  },
+  {
+    "exec_headline": "A critical security flaw in an industrial edge computing device used in manufacturing plants could allow an attacker to crash or take control of the device if left unpatched.",
+    "business_impact": "If exploited, this could interrupt production operations, cause equipment to behave unpredictably, or give an outside attacker a foothold inside the plant network, potentially leading to costly downtime or safety incidents.",
+    "sector": "Critical Manufacturing",
+    "cve_ids": [
+      "CVE-2026-109618",
+      "CVE-2026-109619"
+    ],
+    "vendor": "Siemens",
+    "product": "Siemens RUGGEDCOM APE1808",
+    "attack_ics_technique": null,
+    "exploit_maturity": "Not specified in source; no public exploitation or proof-of-concept activity stated",
+    "cvss_score": 9.8,
+    "ot_risk_rating": "Critical",
+    "ot_risk_rationale": "A CVSS 9.8 use-after-free vulnerability (CWE-416) can lead to memory corruption, crashes, or potential remote code execution; the APE1808 is an application-processing/edge-computing platform that is often IT-adjacent (hosting third-party and network-facing applications) rather than fully air-gapped, increasing reachability and consequence to availability and integrity of dependent control functions.",
+    "patch_status": "Not specified in source; consult the Siemens/CISA advisory page for current fix availability",
+    "known_mitigation": "Restrict network access to the RUGGEDCOM APE1808 management and application interfaces to trusted administrative hosts only, segment the device from untrusted or IT-facing networks, and monitor for abnormal crashes or restarts until a vendor patch is applied.",
+    "mitigation_confidence": "suggested",
+    "purdue_level_estimate": "Typically Level 2-3, edge/application processing platform supporting control network operations, often IT-adjacent due to hosted applications",
+    "severity_tier": "critical",
+    "advisory_row_id": "4105",
+    "source_url": "https://www.cisa.gov/news-events/ics-advisories/icsa-26-316-05",
+    "published": "11/12/2026",
+    "fetched_at": "2026-11-20T16:18:35.867504+00:00"
+  },
+  {
+    "exec_headline": "Serious software flaws in an energy-sector grid management platform could let an unauthorized user bypass access controls and manipulate the underlying database, potentially disrupting monitoring or control of power system operations.",
+    "business_impact": "If exploited, an attacker could gain access they shouldn't have and alter or extract data the system relies on, which could degrade visibility into grid operations or enable unauthorized changes, risking service disruption for energy and critical manufacturing customers.",
+    "sector": "Critical Manufacturing; Energy",
+    "cve_ids": [
+      "CVE-2026-63017",
+      "CVE-2026-63774"
+    ],
+    "vendor": "Subnet Solutions",
+    "product": "Subnet Solutions PowerSYSTEM Center",
+    "attack_ics_technique": {
+      "id": "T0819",
+      "name": "Exploit Public-Facing Application",
+      "url": "https://attack.mitre.org/techniques/T0819/"
+    },
+    "exploit_maturity": "No known public exploitation reported in the source advisory.",
+    "cvss_score": 9.0,
+    "ot_risk_rating": "Critical",
+    "ot_risk_rationale": "The combination of an authorization bypass and a SQL injection flaw in an energy-sector management platform allows an attacker to both circumvent access controls and manipulate backend data, and such management platforms are typically IT-adjacent or network-reachable from operations networks, making consequence (integrity/availability of grid management functions) severe even though no active exploitation has been reported.",
+    "patch_status": "Not specified in source; consult vendor advisory for available fixed versions.",
+    "known_mitigation": "Restrict network access to the PowerSYSTEM Center application to trusted management networks only, place it behind a firewall/VPN rather than exposing it directly, enforce strict authentication and least-privilege database accounts, and monitor application and database logs for anomalous queries or authorization anomalies pending vendor patching.",
+    "mitigation_confidence": "suggested",
+    "purdue_level_estimate": "Typically Level 2-3, operations management/control center systems for grid and substation management, not field-level control devices.",
+    "severity_tier": "critical",
+    "advisory_row_id": "4104",
+    "source_url": "https://www.cisa.gov/news-events/ics-advisories/icsa-26-307-01",
+    "published": "11/3/2026",
+    "fetched_at": "2026-11-20T16:18:56.728764+00:00"
+  },
+  {
+    "exec_headline": "A software weakness could let an attacker reuse a stolen login session to access business systems without a valid password.",
+    "business_impact": "If exploited, an attacker could gain unauthorized access to applications that use this authentication component, potentially viewing or manipulating data and operations tied to manufacturing or IT business systems.",
+    "sector": "Critical Manufacturing; Information Technology",
+    "cve_ids": [
+      "CVE-2026-89209"
+    ],
+    "vendor": "Siemens",
+    "product": "Siemens Mendix SAML Module",
+    "attack_ics_technique": null,
+    "exploit_maturity": "No known public exploitation or proof-of-concept reported in the advisory summary.",
+    "cvss_score": 6.8,
+    "ot_risk_rating": "Medium",
+    "ot_risk_rationale": "The affected component is a SAML authentication module for Mendix, a low-code application platform typically deployed at the enterprise/IT-adjacent layer rather than directly embedded in process control hardware; the flaw enables authentication bypass via session/token replay (CWE-294), which threatens data and access integrity but has no direct indication of safety or availability impact to physical processes.",
+    "patch_status": "Not specified in the provided advisory summary; consult Siemens ProductCERT advisory for update availability.",
+    "known_mitigation": "Enforce short-lived session/token expiration and strict SAML assertion validation (e.g., single-use assertions, timestamp and audience checks), and monitor authentication logs for anomalous repeated assertions; restrict exposure of the Mendix application to trusted networks where feasible.",
+    "mitigation_confidence": "suggested",
+    "purdue_level_estimate": "Typically Level 4-5, enterprise/IT business logistics and application layer, as Mendix is a low-code application platform rather than a direct process control component.",
+    "severity_tier": "medium",
+    "advisory_row_id": "4103",
+    "source_url": "https://www.cisa.gov/news-events/ics-advisories/icsa-26-302-01",
+    "published": "10/29/2026",
+    "fetched_at": "2026-11-20T16:19:14.244291+00:00"
+  },
+  {
+    "exec_headline": "Flaws in a Hitachi Energy communications product used in power grid substations could let an attacker on the network interfere with protective signaling without needing valid credentials, raising the risk of equipment damage or power outages if exploited.",
+    "business_impact": "If exploited, this could allow unauthorized interference with the equipment that helps protect electrical grid infrastructure, potentially leading to equipment damage, service interruptions, or unsafe grid conditions. There is no indication this is currently being exploited.",
+    "sector": "Energy",
+    "cve_ids": [
+      "CVE-2026-10756",
+      "CVE-2026-106087"
+    ],
+    "vendor": "Hitachi Energy",
+    "product": "TRO600 series products",
+    "attack_ics_technique": null,
+    "exploit_maturity": "Not stated in available source; no public exploitation reported in the advisory summary",
+    "cvss_score": 7.5,
+    "ot_risk_rating": "High",
+    "ot_risk_rationale": "Missing authentication for a critical function combined with improper restriction of a communication channel means an attacker with network access could potentially manipulate protective signaling without authentication; TRO600 teleprotection equipment is typically IT-adjacent (connected via telecom/communication networks to substations) rather than fully air-gapped, and the consequence touches grid protection functions, which are safety- and availability-relevant.",
+    "patch_status": "Not specified in available source material",
+    "known_mitigation": "Restrict network and physical access to TRO600 devices and their communication links to authorized personnel and systems only, using firewalls/VLAN segmentation to isolate teleprotection communication paths from general IT and untrusted networks, and monitor for unexpected configuration or control traffic to these devices until vendor patches or configuration guidance are applied.",
+    "mitigation_confidence": "suggested",
+    "purdue_level_estimate": "Typically Level 1-2, basic control and supervisory communication (teleprotection signaling between substations)",
+    "severity_tier": "high",
+    "advisory_row_id": "4102",
+    "source_url": "https://www.cisa.gov/news-events/ics-advisories/icsa-26-302-02",
+    "published": "10/29/2026",
+    "fetched_at": "2026-11-20T16:19:33.189991+00:00"
+  },
+  {
+    "exec_headline": "A high-severity flaw in a Hitachi Energy communication device used in electric utility substations could let an attacker remotely take over the equipment.",
+    "business_impact": "If exploited, attackers could gain control of equipment that helps manage grid communications, potentially disrupting electricity delivery or enabling unauthorized manipulation of substation systems.",
+    "sector": "Energy",
+    "cve_ids": [
+      "CVE-2026-13162",
+      "CVE-2026-43284"
+    ],
+    "vendor": "Hitachi Energy",
+    "product": "CoreTec5 (<=3.4.0, 5.0.0), CoreTec4 (<=3.4.0)",
+    "attack_ics_technique": null,
+    "exploit_maturity": "Not stated in advisory",
+    "cvss_score": 8.8,
+    "ot_risk_rating": "High",
+    "ot_risk_rationale": "The combination of a memory corruption flaw (write-what-where) and an OS command injection vulnerability could enable remote code execution with high impact on device integrity and availability; however, CoreTec devices are substation communication equipment typically deployed on segmented OT networks rather than directly internet-facing, and no public exploitation has been reported, moderating the overall risk from critical to high.",
+    "patch_status": "Not stated in advisory",
+    "known_mitigation": "Restrict network access to CoreTec device management and communication interfaces to trusted OT network segments only, and monitor for anomalous command traffic or unexpected process execution on the device until a vendor patch is available.",
+    "mitigation_confidence": "suggested",
+    "purdue_level_estimate": "Typically Level 1-2, basic control/substation communication processor",
+    "severity_tier": "high",
+    "advisory_row_id": "4101",
+    "source_url": "https://www.cisa.gov/news-events/ics-advisories/icsa-26-302-03",
+    "published": "10/29/2026",
+    "fetched_at": "2026-11-20T16:19:51.180886+00:00"
+  },
+  {
+    "exec_headline": "A critical flaw in widely used control-system software could let an attacker crash or take control of equipment used in manufacturing and research facilities.",
+    "business_impact": "If exploited, this could disrupt or take over the software that coordinates plant equipment, potentially halting production or research operations and risking unsafe equipment behavior until the issue is fixed.",
+    "sector": "Critical Manufacturing",
+    "cve_ids": [
+      "CVE-2026-114595",
+      "CVE-2026-114596",
+      "CVE-2026-114597",
+      "CVE-2026-114598"
+    ],
+    "vendor": "The EPICS Community",
+    "product": "EPICS Base",
+    "attack_ics_technique": null,
+    "exploit_maturity": "Not stated in source; no public exploitation or proof-of-concept activity mentioned",
+    "cvss_score": 9.8,
+    "ot_risk_rating": "High",
+    "ot_risk_rationale": "The CVSS score and underlying memory-safety weaknesses (length-handling, integer overflow, type confusion) suggest potential for crash or code execution in a core control-system communication library, but exploit maturity is unconfirmed and EPICS-based systems are typically deployed on IT-adjacent research/control networks rather than directly internet-facing, moderating immediate exploitability.",
+    "patch_status": "Advisory lists affected versions as EPICS Base release <=7.0.10; no specific patched version or remediation timeline is provided in the source summary",
+    "known_mitigation": "Restrict network access to EPICS Channel Access and related control-network ports to trusted hosts only, segment EPICS-based control systems from general IT and internet-facing networks, and monitor for anomalous traffic to affected systems until a vendor patch can be applied.",
+    "mitigation_confidence": "suggested",
+    "purdue_level_estimate": "Typically Level 2, supervisory control (EPICS Base commonly underlies instrumentation and control-system software layers in research and manufacturing environments)",
+    "severity_tier": "high",
+    "advisory_row_id": "4100",
+    "source_url": "https://www.cisa.gov/news-events/ics-advisories/icsa-26-300-01",
+    "published": "10/27/2026",
+    "fetched_at": "2026-11-20T16:20:14.532729+00:00"
+  },
+  {
+    "exec_headline": "Multiple critical flaws found in widely used industrial monitoring and data-visualization software could let attackers take over plant monitoring and historian systems.",
+    "business_impact": "If exploited, these weaknesses could let an outside attacker gain unauthorized control over software used to monitor and manage manufacturing operations, potentially disrupting production visibility, corrupting operational data, or giving attackers a foothold to move deeper into plant systems.",
+    "sector": "Critical Manufacturing",
+    "cve_ids": [
+      "CVE-2023-4863",
+      "CVE-2026-16436",
+      "CVE-2026-16437",
+      "CVE-2026-16438"
+    ],
+    "vendor": "Mitsubishi Electric",
+    "product": "GENESIS, GENESIS64, ICONICS Suite, Hyper Historian, AnalytiX, MobileHMI, IoTWorX, MC Works64, GENESIS32, and BizViz",
+    "attack_ics_technique": null,
+    "exploit_maturity": "Not stated in the advisory summary; CVE-2023-4863 is a publicly known issue in third-party image-processing code historically linked to in-the-wild exploitation in other products, but the advisory does not confirm exploitation against this product line.",
+    "cvss_score": 9.1,
+    "ot_risk_rating": "High",
+    "ot_risk_rationale": "The affected products are SCADA/HMI, historian, and visualization applications that are typically IT-adjacent and network-connected rather than air-gapped, the CVSS score (9.1) and CWE mix (out-of-bounds write enabling possible code execution, incorrect privilege assignment, weak password recovery) indicate potential for significant integrity and availability impact, but no confirmed exploitation or public proof-of-concept is cited in the source.",
+    "patch_status": "Not specified in the provided advisory summary; affected version ranges are listed but remediation/patch availability is not confirmed in this source.",
+    "known_mitigation": "Restrict network access to GENESIS/ICONICS servers and historian/HMI interfaces to trusted management networks only, disable or limit any web-based or remote visualization interfaces not strictly required, and monitor for abnormal authentication attempts or unexpected process crashes on these hosts pending vendor patching.",
+    "mitigation_confidence": "suggested",
+    "purdue_level_estimate": "Typically Level 2-3, supervisory control, HMI, and historian/data visualization systems",
+    "severity_tier": "high",
+    "advisory_row_id": "4099",
+    "source_url": "https://www.cisa.gov/news-events/ics-advisories/icsa-26-300-02",
+    "published": "10/27/2026",
+    "fetched_at": "2026-11-20T16:20:36.817068+00:00"
+  },
+  {
+    "exec_headline": "A flaw in a widely used healthcare data platform could let an attacker intercept sensitive patient information as it moves across a network.",
+    "business_impact": "If exploited, this could expose confidential patient health data to unauthorized parties while it is being transmitted, creating privacy violations, regulatory exposure, and loss of patient trust. There is no indication this affects patient care availability or safety systems directly.",
+    "sector": "Healthcare and Public Health",
+    "cve_ids": [
+      "CVE-2026-111594"
+    ],
+    "vendor": "InterSystems Corporation",
+    "product": "InterSystems Corporation InterSystems IRIS for Health",
+    "attack_ics_technique": null,
+    "exploit_maturity": "Not stated in advisory; no public exploit activity reported in the source material.",
+    "cvss_score": 8.1,
+    "ot_risk_rating": "Medium",
+    "ot_risk_rationale": "No known public exploitation and the product is a healthcare data/application platform typically deployed at the enterprise/IT-adjacent layer rather than directly on a control network, but the confidentiality impact on sensitive patient data is significant given cleartext transmission of information.",
+    "patch_status": "Not specified in available advisory data; affected versions listed (2026.2.0.221, 2026.1.0.235, 2025.3.0.226) with no confirmed patched version referenced in this summary.",
+    "known_mitigation": "Restrict network access to the InterSystems IRIS for Health environment to trusted, encrypted network segments (e.g., enforce TLS/VPN for all data in transit) and monitor network traffic for unencrypted transmission of sensitive data until a vendor patch is applied.",
+    "mitigation_confidence": "suggested",
+    "purdue_level_estimate": "Typically Level 3 or higher, enterprise/business IT data management layer rather than a field control device.",
+    "severity_tier": "medium",
+    "advisory_row_id": "4098",
+    "source_url": "https://www.cisa.gov/news-events/ics-advisories/icsma-26-295-01",
+    "published": "10/22/2026",
+    "fetched_at": "2026-11-20T16:20:54.219177+00:00"
+  },
+  {
     "exec_headline": "A software flaw in a popular industrial controller platform could let an attacker disrupt or interfere with automated equipment operations.",
     "business_impact": "If exploited, this issue could cause unexpected behavior or loss of control over automated machinery, potentially halting production, damaging equipment, or creating safety hazards, particularly in manufacturing, energy, transportation, and water treatment facilities.",
     "sector": "Critical Manufacturing; Energy; Transportation Systems; Water and Wastewater Systems",
@@ -821,9 +1099,9 @@
     "vendor": "Jinan USR IOT Technology Limited (PUSR)",
     "product": "Jinan USR IOT Technology Limited (PUSR) USR-W610 RS232/485 to Wi-Fi/Ethernet Converter",
     "attack_ics_technique": {
-      "id": "T0891",
-      "name": "Hardcoded Credentials",
-      "url": "https://attack.mitre.org/techniques/T0891/"
+      "id": "T1694.002",
+      "name": "Insecure Credentials: Hardcoded Credentials",
+      "url": "https://attack.mitre.org/techniques/T1694/002/"
     },
     "exploit_maturity": "No known public exploitation reported in the advisory; the vulnerability is disclosed but exploit maturity is not stated.",
     "cvss_score": 9.8,
@@ -973,9 +1251,9 @@
     "vendor": "Eppendorf",
     "product": "Eppendorf BioFlo 320",
     "attack_ics_technique": {
-      "id": "T0891",
-      "name": "Hardcoded Credentials",
-      "url": "https://attack.mitre.org/techniques/T0891/"
+      "id": "T1694.002",
+      "name": "Insecure Credentials: Hardcoded Credentials",
+      "url": "https://attack.mitre.org/techniques/T1694/002/"
     },
     "exploit_maturity": "No known public exploit or active exploitation reported in available source",
     "cvss_score": 9.8,
@@ -1050,9 +1328,9 @@
     "vendor": "Yarbo",
     "product": "Yarbo Android/iOS Mobile Application and Cloud Infrastructure",
     "attack_ics_technique": {
-      "id": "T0812",
-      "name": "Default Credentials",
-      "url": "https://attack.mitre.org/techniques/T0812/"
+      "id": "T1694.001",
+      "name": "Insecure Credentials: Default Credentials",
+      "url": "https://attack.mitre.org/techniques/T1694/001/"
     },
     "exploit_maturity": "No known public exploitation reported; vulnerabilities disclosed via CISA advisory with no indication of active exploitation in the wild.",
     "cvss_score": 9.8,
@@ -1197,9 +1475,9 @@
     "vendor": "Danelec",
     "product": "MacGregor Voyage Data Recorder (VDR) G4e",
     "attack_ics_technique": {
-      "id": "T0812",
-      "name": "Default Credentials",
-      "url": "https://attack.mitre.org/techniques/T0812/"
+      "id": "T1694.001",
+      "name": "Insecure Credentials: Default Credentials",
+      "url": "https://attack.mitre.org/techniques/T1694/001/"
     },
     "exploit_maturity": "Not stated in source; no public exploitation reported in the advisory summary",
     "cvss_score": 8.3,
@@ -1477,9 +1755,9 @@
     "vendor": "Rockwell Automation",
     "product": "Rockwell Automation FLEX I/O EtherNet/IP Adapters (1794-AENTR, 1794-AENTRXT), V2.012",
     "attack_ics_technique": {
-      "id": "T0855",
-      "name": "Unauthorized Command Message",
-      "url": "https://collaborate.mitre.org/attackics/index.php/Technique/T0855"
+      "id": "T1692.001",
+      "name": "Unauthorized Message: Command Message",
+      "url": "https://attack.mitre.org/techniques/T1692/001/"
     },
     "exploit_maturity": "No known public exploit reported in available summary; advisory does not indicate active exploitation.",
     "cvss_score": 9.4,
@@ -1536,9 +1814,9 @@
     "vendor": "Brickcom",
     "product": "Brickcom Cameras (Cube, Dome, Bullet, Box) v3.2.3.5.6",
     "attack_ics_technique": {
-      "id": "T0812",
-      "name": "Default Credentials",
-      "url": "https://attack.mitre.org/techniques/T0812/"
+      "id": "T1694.001",
+      "name": "Insecure Credentials: Default Credentials",
+      "url": "https://attack.mitre.org/techniques/T1694/001/"
     },
     "exploit_maturity": "Not stated in advisory; no public exploitation reported",
     "cvss_score": 7.7,
@@ -1613,9 +1891,9 @@
     "vendor": "NAVTOR",
     "product": "NavBox",
     "attack_ics_technique": {
-      "id": "T0812",
-      "name": "Default Credentials",
-      "url": "https://attack.mitre.org/techniques/T0812/"
+      "id": "T1694.001",
+      "name": "Insecure Credentials: Default Credentials",
+      "url": "https://attack.mitre.org/techniques/T1694/001/"
     },
     "exploit_maturity": "No known public exploitation reported in the advisory; exploit maturity not stated.",
     "cvss_score": 6.3,
@@ -1966,9 +2244,9 @@
     "vendor": "EVoke Systems",
     "product": "EVoke Systems Charging Station Management System",
     "attack_ics_technique": {
-      "id": "T0855",
-      "name": "Unauthorized Command Message",
-      "url": "https://attack.mitre.org/techniques/T0855/"
+      "id": "T1692.001",
+      "name": "Unauthorized Message: Command Message",
+      "url": "https://attack.mitre.org/techniques/T1692/001/"
     },
     "exploit_maturity": "No known public exploitation reported in source; vulnerability is newly disclosed with high theoretical exploitability due to missing authentication controls.",
     "cvss_score": 9.4,
@@ -2020,9 +2298,9 @@
     "vendor": "Daktronics",
     "product": "Daktronics Controller Firmware (VFC-DMP-5000, DMP-5000, DMP-8000)",
     "attack_ics_technique": {
-      "id": "T0812",
-      "name": "Default Credentials",
-      "url": "https://collaborate.mitre.org/attackics/index.php/Technique/T0812"
+      "id": "T1694.001",
+      "name": "Insecure Credentials: Default Credentials",
+      "url": "https://attack.mitre.org/techniques/T1694/001/"
     },
     "exploit_maturity": "Not stated in advisory; no evidence of known public exploitation provided",
     "cvss_score": 8.1,
@@ -2362,9 +2640,9 @@
     "vendor": "Gardyn",
     "product": "Gardyn IoT Hub",
     "attack_ics_technique": {
-      "id": "T0812",
-      "name": "Default Credentials",
-      "url": "https://attack.mitre.org/techniques/T0812/"
+      "id": "T1694.001",
+      "name": "Insecure Credentials: Default Credentials",
+      "url": "https://attack.mitre.org/techniques/T1694/001/"
     },
     "exploit_maturity": "Not stated in advisory; no public exploitation reported",
     "cvss_score": 10.0,
@@ -2547,9 +2825,9 @@
     "vendor": "Delta Electronics",
     "product": "Delta Electronics DVP12SE PLC",
     "attack_ics_technique": {
-      "id": "T0855",
-      "name": "Unauthorized Command Message",
-      "url": "https://collaborate.mitre.org/attackics/index.php/Technique/T0855"
+      "id": "T1692.001",
+      "name": "Unauthorized Message: Command Message",
+      "url": "https://attack.mitre.org/techniques/T1692/001/"
     },
     "exploit_maturity": "No public exploit code or active exploitation reported in the source; severity stems from the ease of exploitation implied by missing authentication controls.",
     "cvss_score": 9.8,
