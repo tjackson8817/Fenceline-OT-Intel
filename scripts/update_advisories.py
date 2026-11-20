@@ -31,6 +31,35 @@ LOOKBACK_DAYS = 60            # ignore advisories older than this on a fresh bac
 MODEL = "claude-sonnet-5"
 API_KEY = os.environ.get("ANTHROPIC_API_KEY")
 
+# ATT&CK for ICS technique IDs retired in the October 2026 release, with their replacements.
+# Applied to new records and to records already stored, so the dashboard never shows a retired ID.
+RETIRED_ICS = {
+    "T0803": ("T1691.001", "Block Operational Technology Message: Command Message"),
+    "T0804": ("T1691.002", "Block Operational Technology Message: Reporting Message"),
+    "T0805": ("T1695.001", "Block Communications: Serial COM"),
+    "T0812": ("T1694.001", "Insecure Credentials: Default Credentials"),
+    "T0839": ("T1693.002", "Modify Firmware: Module Firmware"),
+    "T0855": ("T1692.001", "Unauthorized Message: Command Message"),
+    "T0856": ("T1692.002", "Unauthorized Message: Reporting Message"),
+    "T0857": ("T1693.001", "Modify Firmware: System Firmware"),
+    "T0891": ("T1694.002", "Insecure Credentials: Hardcoded Credentials"),
+}
+
+
+def remap_technique(record):
+    """Replace a retired ATT&CK for ICS ID with its current one. Returns True if changed."""
+    tech = record.get("attack_ics_technique")
+    if not isinstance(tech, dict):
+        return False
+    old = (tech.get("id") or "").strip().upper()
+    if old not in RETIRED_ICS:
+        return False
+    new_id, new_name = RETIRED_ICS[old]
+    tech["id"] = new_id
+    tech["name"] = new_name
+    tech["url"] = "https://attack.mitre.org/techniques/" + new_id.replace(".", "/") + "/"
+    return True
+
 SYSTEM_PROMPT = """You are an OT/ICS cybersecurity analyst. You convert raw vulnerability
 advisories into a structured record for a dashboard read by two audiences:
 mid-level to executive leadership, and technical OT security staff.
@@ -58,6 +87,17 @@ Rules:
 - attack_ics_technique: map to a MITRE ATT&CK for ICS technique ID only
   if the behavior described clearly matches a known technique. Include
   the canonical MITRE URL. If no clear match, return null for this field.
+  Use IDs from the current ATT&CK for ICS release (October 2026). These
+  older IDs were retired and must not be used: T0855 (now T1692.001
+  Unauthorized Message: Command Message), T0856 (now T1692.002 Reporting
+  Message), T0812 (now T1694.001 Insecure Credentials: Default
+  Credentials), T0891 (now T1694.002 Hardcoded Credentials), T0857 (now
+  T1693.001 Modify Firmware: System Firmware), T0839 (now T1693.002
+  Module Firmware), T0803 (now T1691.001 Block Operational Technology
+  Message: Command Message), T0804 (now T1691.002 Reporting Message),
+  T0805 (now T1695.001 Block Communications: Serial COM). For a
+  sub-technique, the URL uses a slash, e.g.
+  https://attack.mitre.org/techniques/T1692/001/
 - severity_tier is one of: critical, high, medium, low -- based on your
   ot_risk_rating, not raw CVSS.
 - The input you receive is a structured summary (title, vendor, product,
@@ -193,6 +233,9 @@ def main():
         sys.exit(1)
 
     existing = load_existing()
+    remapped = sum(remap_technique(r) for r in existing)
+    if remapped:
+        print(f"Updated {remapped} stored record(s) from retired ATT&CK IDs to current ones.")
     known_ids = {r.get("advisory_row_id") for r in existing if r.get("advisory_row_id")}
 
     rows = fetch_rows()
@@ -214,6 +257,7 @@ def main():
             failures += 1
             continue
 
+        remap_technique(enriched)
         enriched["advisory_row_id"] = row.get("icsad_ID")
         enriched["source_url"] = link
         enriched["published"] = row.get("Original_Release_Date", "")
@@ -228,6 +272,8 @@ def main():
 
     if not new_records:
         print("No new advisories.")
+        if remapped:
+            save(existing)
         return
 
     combined = (new_records + existing)[:MAX_RECORDS]
