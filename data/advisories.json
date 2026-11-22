@@ -1,5 +1,29 @@
 [
   {
+    "exec_headline": "A cellular network base station device used in communications infrastructure has a flaw that could cause it to crash or stop functioning if triggered.",
+    "business_impact": "If exploited, this could interrupt mobile/cellular service provided through the affected equipment, impacting connectivity for the organization or its customers until the device is restored.",
+    "sector": "Communications; Information Technology",
+    "cve_ids": [
+      "CVE-2026-96274"
+    ],
+    "vendor": "Baicells Technologies",
+    "product": "Baicells Nova 430H (model pBS3101SH), versions <=BaiBLQ_3.0.12",
+    "attack_ics_technique": null,
+    "exploit_maturity": "Unknown - no exploitation status or proof-of-concept activity stated in the available advisory summary",
+    "cvss_score": 7.4,
+    "ot_risk_rating": "High",
+    "ot_risk_rationale": "The affected device is a cellular base station (eNodeB), a class of equipment often network-facing for backhaul/management, and the underlying flaw (uncaught exception) typically results in device crash or denial of service, directly affecting availability of communications service; however, no confirmed active exploitation is documented, which tempers the rating from critical.",
+    "patch_status": "Not specified in available advisory summary",
+    "known_mitigation": "Restrict network and remote management access to the base station to trusted administrative hosts only, place the device behind a firewall/VPN rather than exposing its management interface to the internet, and monitor for unexpected reboots or service interruptions as an indicator of exploitation attempts.",
+    "mitigation_confidence": "suggested",
+    "purdue_level_estimate": "Typically Level 3, communications/network infrastructure layer (telecom base station equipment; not a traditional manufacturing Purdue control device)",
+    "severity_tier": "high",
+    "advisory_row_id": "4049",
+    "source_url": "https://www.cisa.gov/news-events/ics-advisories/icsa-26-272-04",
+    "published": "9/29/2026",
+    "fetched_at": "2026-11-22T23:25:48.902077+00:00"
+  },
+  {
     "exec_headline": "A remote communications device used to connect transportation, energy, and water systems has security weaknesses that could let an attacker manipulate its web interface or trick it into accepting unauthorized software.",
     "business_impact": "If exploited, an attacker could tamper with the device's management screen to steal operator credentials or trick users, or potentially get the device to accept software updates that weren't properly verified as legitimate. This could lead to loss of visibility or control over remote sites and erode trust in the integrity of data or commands coming from the field.",
     "sector": "Transportation Systems; Energy; Water and Wastewater Systems",
@@ -3917,33 +3941,5 @@
     "source_url": "https://www.cisa.gov/news-events/ics-advisories/icsa-26-174-05",
     "published": "6/23/2026",
     "fetched_at": "2026-07-07T19:46:22.312596+00:00"
-  },
-  {
-    "exec_headline": "Software flaws in the operating system used by several B&R industrial automation products could let an attacker crash equipment or gain deeper control than intended if not addressed.",
-    "business_impact": "If exploited, these weaknesses could interrupt manufacturing operations, cause equipment to behave unpredictably, or give an intruder elevated control over affected systems, creating risk to production uptime and potentially to safety.",
-    "sector": "Critical Manufacturing",
-    "cve_ids": [
-      "CVE-2026-31431",
-      "CVE-2026-43284",
-      "CVE-2026-46333",
-      "CVE-2026-46300",
-      "CVE-2026-43494"
-    ],
-    "vendor": "B&R Industrial Automation GmbH",
-    "product": "Linux for B&R (<=12), APROL (<APROL-AutoYaST-DVD-V4.4-010.10.260602), X20EDS410 (all versions)",
-    "attack_ics_technique": null,
-    "exploit_maturity": "No public exploitation or proof-of-concept reported in the advisory",
-    "cvss_score": 7.8,
-    "ot_risk_rating": "High",
-    "ot_risk_rationale": "These are Linux kernel-level memory corruption and privilege management flaws (out-of-bounds write, write-what-where, improper privilege handling) embedded in controllers and a supervisory automation platform that are typically IT-adjacent within the OT network rather than internet-facing; successful exploitation could cause loss of availability or unauthorized control actions, but no active exploitation has been reported.",
-    "patch_status": "Fixed version identified for APROL (V4.4-010.10.260602 or later); no specific patched version stated for Linux for B&R or X20EDS410 in the provided summary\u2014consult vendor advisory for current remediation guidance.",
-    "known_mitigation": "Restrict network access to affected controllers and the APROL system to trusted engineering/maintenance segments only, disable any unnecessary remote administrative or Linux shell services on these devices, and monitor for unexpected process crashes or privilege escalation attempts until vendor patches are applied.",
-    "mitigation_confidence": "suggested",
-    "purdue_level_estimate": "Typically spans Level 1 (X20EDS410 I/O module, basic control) to Level 2 (APROL supervisory/process control system), per vendor documentation and common deployment practice.",
-    "severity_tier": "high",
-    "advisory_row_id": "4790",
-    "source_url": "https://www.cisa.gov/news-events/ics-advisories/icsa-26-174-06",
-    "published": "6/23/2026",
-    "fetched_at": "2026-07-07T19:46:43.937379+00:00"
   }
 ]
