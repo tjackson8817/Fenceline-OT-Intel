@@ -1,5 +1,32 @@
 [
   {
+    "exec_headline": "A vulnerability in a widely used EV charging management platform could let an attacker bypass login controls and take over user accounts or charging operations without proper credentials.",
+    "business_impact": "If exploited, an outside party could gain unauthorized access to EV charging station management, potentially disrupting charging services, exposing customer account data, or hijacking active sessions. This could affect service availability and customer trust for energy and transportation operators relying on this platform.",
+    "sector": "Energy; Transportation Systems",
+    "cve_ids": [
+      "CVE-2026-95102",
+      "CVE-2026-97363",
+      "CVE-2026-97212",
+      "CVE-2026-93474"
+    ],
+    "vendor": "Monta",
+    "product": "Monta monta.app",
+    "attack_ics_technique": null,
+    "exploit_maturity": "Not stated in advisory; no public exploitation or proof-of-concept referenced",
+    "cvss_score": 9.4,
+    "ot_risk_rating": "High",
+    "ot_risk_rationale": "The platform is a cloud/web-based EV charging management application, which is typically internet-facing and IT-adjacent rather than air-gapped, and the combined weaknesses (missing authentication, weak brute-force protection, poor credential protection, and weak session expiration) could allow full account takeover affecting availability and integrity of charging operations; however, no evidence of active exploitation lowers the rating from critical to high.",
+    "patch_status": "Not specified in advisory",
+    "known_mitigation": "Restrict and monitor access to the monta.app platform (e.g., enforce network allow-listing or VPN access where possible), enable multi-factor authentication if supported, monitor for repeated failed login attempts, and force session re-authentication/shorter session timeouts until vendor patches are applied.",
+    "mitigation_confidence": "suggested",
+    "purdue_level_estimate": "Typically Level 4, enterprise/cloud-based management application for EV charging infrastructure, not a traditional process control layer",
+    "severity_tier": "high",
+    "advisory_row_id": "4057",
+    "source_url": "https://www.cisa.gov/news-events/ics-advisories/icsa-26-274-02",
+    "published": "10/1/2026",
+    "fetched_at": "2026-11-23T06:34:53.765942+00:00"
+  },
+  {
     "exec_headline": "A cellular network base station device used in communications infrastructure has a flaw that could cause it to crash or stop functioning if triggered.",
     "business_impact": "If exploited, this could interrupt mobile/cellular service provided through the affected equipment, impacting connectivity for the organization or its customers until the device is restored.",
     "sector": "Communications; Information Technology",
@@ -3917,29 +3944,5 @@
     "source_url": "https://www.cisa.gov/news-events/ics-advisories/icsa-26-174-04",
     "published": "6/23/2026",
     "fetched_at": "2026-07-07T19:46:08.322355+00:00"
-  },
-  {
-    "exec_headline": "A weakness in an access-control feature of an ABB industrial control system could let someone bypass a security lock meant to restrict who can make changes to plant equipment.",
-    "business_impact": "If exploited, an attacker with access to the plant network could bypass a protective lock and make unauthorized changes to process control settings, potentially disrupting manufacturing operations or degrading product quality and safety margins.",
-    "sector": "Critical Manufacturing",
-    "cve_ids": [
-      "CVE-2025-7064"
-    ],
-    "vendor": "ABB",
-    "product": "ABB Freelance Security Lock",
-    "attack_ics_technique": null,
-    "exploit_maturity": "No known public exploitation reported in the advisory",
-    "cvss_score": 6.6,
-    "ot_risk_rating": "Medium",
-    "ot_risk_rationale": "The affected component (a security/authentication lock within a DCS engineering environment) is typically IT-adjacent rather than internet-facing, no active exploitation has been reported, but successful exploitation could allow unauthorized bypass of an access-control safeguard affecting system integrity.",
-    "patch_status": "Not specified in the advisory summary provided",
-    "known_mitigation": "Restrict network and physical access to engineering workstations and systems running ABB Freelance so that only authorized personnel can reach the Security Lock function, and monitor for unexpected configuration or access-control changes.",
-    "mitigation_confidence": "suggested",
-    "purdue_level_estimate": "Typically Level 2, supervisory control and engineering workstation environment",
-    "severity_tier": "medium",
-    "advisory_row_id": "4791",
-    "source_url": "https://www.cisa.gov/news-events/ics-advisories/icsa-26-174-05",
-    "published": "6/23/2026",
-    "fetched_at": "2026-07-07T19:46:22.312596+00:00"
   }
 ]
