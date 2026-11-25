@@ -1,5 +1,77 @@
 [
   {
+    "exec_headline": "A flaw in software used to program industrial touchscreen control panels could let an attacker who tricks an engineer into opening a malicious file gain control of that engineer's computer.",
+    "business_impact": "If an attacker tricks a plant engineer into opening a rigged project file, they could take over the engineer's computer and potentially use that access to tamper with the configuration of equipment controlling manufacturing, energy, or water treatment processes, leading to downtime or unsafe conditions and costly recovery.",
+    "sector": "Critical Manufacturing; Energy; Water and Wastewater Systems",
+    "cve_ids": [
+      "CVE-2026-127280"
+    ],
+    "vendor": "AutomationDirect",
+    "product": "C-More EA9 Programming Software",
+    "attack_ics_technique": null,
+    "exploit_maturity": "No known public or in-the-wild exploitation reported in the advisory; no proof-of-concept mentioned.",
+    "cvss_score": 7.8,
+    "ot_risk_rating": "Medium",
+    "ot_risk_rationale": "The flaw (heap-based buffer overflow) affects engineering/programming software that is typically IT-adjacent rather than internet-facing, and exploitation likely requires a user to open a malicious file rather than being remotely reachable over a network; however, successful exploitation could allow code execution on an engineering workstation with the ability to reprogram HMI panels, which is a meaningful integrity/availability concern.",
+    "patch_status": "Not specified in available advisory data; organizations should consult AutomationDirect for update availability for versions beyond V6.80.",
+    "known_mitigation": "Restrict use of C-More EA9 Programming Software to trusted, verified project files only; avoid opening files received from untrusted or unsolicited sources; isolate engineering workstations running this software from general IT/business networks and the internet; and apply application whitelisting/EDR on hosts where it runs.",
+    "mitigation_confidence": "suggested",
+    "purdue_level_estimate": "Typically Level 3, engineering workstation / site operations layer used to program HMI panels (not typically internet-facing).",
+    "severity_tier": "medium",
+    "advisory_row_id": "4126",
+    "source_url": "https://www.cisa.gov/news-events/ics-advisories/icsa-26-328-01",
+    "published": "11/24/2026",
+    "fetched_at": "2026-11-25T07:40:29.271359+00:00"
+  },
+  {
+    "exec_headline": "A flaw in Schneider Electric's electrical system design software could cause the program to crash or potentially let an attacker run unauthorized commands on the computer running it.",
+    "business_impact": "If exploited, this could interrupt engineers' ability to design and configure electrical distribution equipment, or let an attacker gain unauthorized control of the workstation used for that work, potentially delaying projects or exposing sensitive design files.",
+    "sector": "Energy; Critical Manufacturing; Commercial Facilities",
+    "cve_ids": [
+      "CVE-2026-119055"
+    ],
+    "vendor": "Schneider Electric",
+    "product": "EcoStruxure Power Build Rapsody software",
+    "attack_ics_technique": null,
+    "exploit_maturity": "Not stated in source; no public exploitation reported in the provided advisory summary",
+    "cvss_score": 5.3,
+    "ot_risk_rating": "Medium",
+    "ot_risk_rationale": "This is engineering/design software (not a real-time controller), typically run on isolated engineering workstations rather than internet-facing or process-control systems; the use-after-free flaw (CWE-416) would likely require local interaction (e.g., opening a crafted file) and its consequence is limited to application crash or possible code execution on the workstation, not direct impact to safety or process availability.",
+    "patch_status": "Not specified in provided source; consult the vendor/CISA advisory directly for update availability",
+    "known_mitigation": "Restrict use of the software to trusted, vetted project files only; isolate engineering workstations running this software from untrusted networks and removable media; apply standard workstation hardening (least privilege, endpoint monitoring) until a vendor patch is confirmed and applied.",
+    "mitigation_confidence": "suggested",
+    "purdue_level_estimate": "Typically Level 3, engineering workstation/site operations layer (used for electrical switchboard design configuration, not deployed as a real-time field controller)",
+    "severity_tier": "medium",
+    "advisory_row_id": "4125",
+    "source_url": "https://www.cisa.gov/news-events/ics-advisories/icsa-26-328-02",
+    "published": "11/24/2026",
+    "fetched_at": "2026-11-25T07:40:47.507259+00:00"
+  },
+  {
+    "exec_headline": "A critical flaw in refrigeration and climate control management systems used by commercial facilities could let an attacker remotely take over or disrupt the equipment.",
+    "business_impact": "If exploited, this could allow an outside attacker to shut down or manipulate refrigeration and climate control systems, risking spoiled inventory, safety incidents, regulatory non-compliance, and costly downtime for affected facilities.",
+    "sector": "Commercial Facilities",
+    "cve_ids": [
+      "CVE-2026-129713"
+    ],
+    "vendor": "Danfoss",
+    "product": "Danfoss AK-SM 8xxA Series (versions <=5.4.0)",
+    "attack_ics_technique": null,
+    "exploit_maturity": "Not stated in advisory; no public exploitation or proof-of-concept reported in the source summary",
+    "cvss_score": 9.8,
+    "ot_risk_rating": "Critical",
+    "ot_risk_rationale": "No known exploitation yet, but this class of device (a refrigeration/building system manager) is commonly network-connected for remote monitoring and management, making it reachable from IT or even internet-facing networks; a stack-based buffer overflow at this CVSS severity suggests potential for remote code execution, which could disrupt or manipulate critical environmental controls.",
+    "patch_status": "Not stated in advisory summary provided",
+    "known_mitigation": "Restrict network access to the AK-SM 8xxA management interface to trusted, segmented networks only, disable any unnecessary remote access or internet-facing exposure, and monitor network traffic to the device for anomalous connection attempts until a vendor patch can be applied.",
+    "mitigation_confidence": "suggested",
+    "purdue_level_estimate": "Typically Level 2, supervisory control (building/refrigeration management system manager)",
+    "severity_tier": "critical",
+    "advisory_row_id": "4124",
+    "source_url": "https://www.cisa.gov/news-events/ics-advisories/icsa-26-328-03",
+    "published": "11/24/2026",
+    "fetched_at": "2026-11-25T07:41:04.462737+00:00"
+  },
+  {
     "exec_headline": "A vulnerability in a widely used EV charging management platform could let an attacker bypass login controls and take over user accounts or charging operations without proper credentials.",
     "business_impact": "If exploited, an outside party could gain unauthorized access to EV charging station management, potentially disrupting charging services, exposing customer account data, or hijacking active sessions. This could affect service availability and customer trust for energy and transportation operators relying on this platform.",
     "sector": "Energy; Transportation Systems",
@@ -3869,80 +3941,5 @@
     "source_url": "https://www.cisa.gov/news-events/ics-advisories/icsa-26-176-07",
     "published": "6/25/2026",
     "fetched_at": "2026-07-07T19:44:47.197052+00:00"
-  },
-  {
-    "exec_headline": "A weakness in a Siemens industrial software component could allow sensitive digital credentials to be exposed to someone with access to the system, potentially letting them impersonate trusted devices or software.",
-    "business_impact": "If exploited, this issue could let an attacker who already has some access to the affected computer read protected credential information stored on it. That stolen information could then be used to trick other systems into trusting a malicious device or program, which could disrupt plant operations or allow unauthorized changes to production or monitoring systems.",
-    "sector": "Critical Manufacturing; Transportation Systems; Energy; Healthcare and Public Health; Financial Services; Government Facilities",
-    "cve_ids": [
-      "CVE-2026-24349"
-    ],
-    "vendor": "Siemens",
-    "product": "Siemens WinCC Certificate Manager (SIMATIC WinCC Unified PC Runtime V16-V21)",
-    "attack_ics_technique": null,
-    "exploit_maturity": "No known public exploitation or proof-of-concept reported at time of advisory release.",
-    "cvss_score": 7.1,
-    "ot_risk_rating": "Medium",
-    "ot_risk_rationale": "No known exploitation in the wild; the affected component (WinCC Unified PC Runtime) typically runs on engineering/supervisory workstations that are IT-adjacent rather than directly internet-facing, but exposure of cleartext certificate/key material could enable credential misuse and downstream integrity impacts (e.g., spoofed trust relationships) rather than an immediate safety or availability event.",
-    "patch_status": "Not specified in the provided advisory summary; consult the Siemens/CISA advisory for fixed version and update guidance.",
-    "known_mitigation": "Restrict local and network access to systems running WinCC Unified PC Runtime to authorized engineering personnel only, ensure certificate/key storage directories have least-privilege file permissions, and monitor for unauthorized access to configuration or credential files pending vendor patch.",
-    "mitigation_confidence": "suggested",
-    "purdue_level_estimate": "Typically Level 2, supervisory control (HMI/SCADA runtime environment)",
-    "severity_tier": "medium",
-    "advisory_row_id": "4795",
-    "source_url": "https://www.cisa.gov/news-events/ics-advisories/icsa-26-174-01",
-    "published": "6/23/2026",
-    "fetched_at": "2026-07-07T19:45:05.894764+00:00"
-  },
-  {
-    "exec_headline": "A vulnerability in Siemens electrical protection devices used across power, manufacturing, and other critical facilities could let an attacker who gains access to the engineering network plant harmful files on the device, potentially disrupting how it protects equipment.",
-    "business_impact": "If exploited, this could allow someone with network access to interfere with a protective device that helps prevent equipment damage and power outages, potentially leading to safety incidents, equipment damage, or service disruption in facilities such as power substations, factories, hospitals, and other critical sites.",
-    "sector": "Critical Manufacturing; Transportation Systems; Energy; Healthcare and Public Health; Financial Services; Government Facilities",
-    "cve_ids": [
-      "CVE-2025-40808"
-    ],
-    "vendor": "Siemens",
-    "product": "Siemens SIPROTEC 5 Using DIGSI5 Protocol",
-    "attack_ics_technique": null,
-    "exploit_maturity": "Not stated in available summary; no public exploitation reported at time of advisory release",
-    "cvss_score": 6.1,
-    "ot_risk_rating": "Medium",
-    "ot_risk_rationale": "The affected devices are protective relays typically reached only via engineering workstations or IT-adjacent networks (not directly internet-facing), and no public exploit is documented, but the consequence of successful exploitation (unrestricted file upload potentially leading to code execution on a safety-relevant protection device) could affect grid protection integrity, justifying a medium rather than low rating.",
-    "patch_status": "Not specified in the provided summary; consult the Siemens/CISA advisory directly for update availability and version guidance.",
-    "known_mitigation": "Restrict and monitor network access to the DIGSI5 engineering interface and SIPROTEC 5 devices, allowing connections only from trusted, dedicated engineering workstations; segment protection relay networks from general IT and business networks; and disable or tightly control any file transfer/upload functionality not actively required for operations.",
-    "mitigation_confidence": "suggested",
-    "purdue_level_estimate": "Typically Level 1, basic control (protection relay), with engineering access (DIGSI5) often originating from Level 2/3 IT-adjacent engineering workstations",
-    "severity_tier": "medium",
-    "advisory_row_id": "4794",
-    "source_url": "https://www.cisa.gov/news-events/ics-advisories/icsa-26-174-02",
-    "published": "6/23/2026",
-    "fetched_at": "2026-07-07T19:45:27.258983+00:00"
-  },
-  {
-    "exec_headline": "A network management tool used in industrial and infrastructure environments has multiple security flaws that could let an attacker take unauthorized control of the system or disrupt its operation.",
-    "business_impact": "If exploited, this could allow an outside party to manipulate network settings that many industrial devices rely on, potentially causing outages or loss of visibility into critical operations across manufacturing, energy, transportation, healthcare, financial, and government facilities.",
-    "sector": "Critical Manufacturing; Transportation Systems; Energy; Healthcare and Public Health; Financial Services; Government Facilities",
-    "cve_ids": [
-      "CVE-2026-46746",
-      "CVE-2026-46747",
-      "CVE-2026-46748",
-      "CVE-2026-46749"
-    ],
-    "vendor": "Siemens",
-    "product": "Siemens SINEC INS",
-    "attack_ics_technique": null,
-    "exploit_maturity": "Not stated in advisory; no evidence of public exploitation provided.",
-    "cvss_score": 8.8,
-    "ot_risk_rating": "High",
-    "ot_risk_rationale": "The affected product manages core network services (e.g., addressing/naming) for OT environments, making it IT-adjacent and potentially reachable from broader network segments; the CWE mix (privilege misuse, improper authentication/handling, weak hashing, and command injection) suggests a credible path to unauthorized command execution, which could affect availability and integrity of dependent OT network services, even though no active exploitation has been confirmed.",
-    "patch_status": "Not specified in the provided summary; consult the official Siemens/CISA advisory for current patch or update availability.",
-    "known_mitigation": "Restrict network access to the SINEC INS management interface to trusted administrative hosts only (e.g., via VLAN segmentation or firewall rules), disable any unnecessary remote management features, and monitor logs for unexpected configuration changes or command execution until a vendor patch is applied.",
-    "mitigation_confidence": "suggested",
-    "purdue_level_estimate": "Typically Level 3, site-level network infrastructure services (e.g., DHCP/DNS management supporting OT networks), per common Siemens SINEC deployment guidance.",
-    "severity_tier": "high",
-    "advisory_row_id": "4792",
-    "source_url": "https://www.cisa.gov/news-events/ics-advisories/icsa-26-174-04",
-    "published": "6/23/2026",
-    "fetched_at": "2026-07-07T19:46:08.322355+00:00"
   }
 ]
