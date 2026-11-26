@@ -1,5 +1,39 @@
 [
   {
+    "exec_headline": "Industrial network switches used to connect plant-floor equipment have multiple security weaknesses that could let an attacker bypass login protections and gain unauthorized control over the network.",
+    "business_impact": "If exploited, these weaknesses could allow an outsider to take control of the network switches that link production equipment together, potentially disrupting operations, cutting off visibility into equipment status, or enabling further intrusion into the facility's control systems.",
+    "sector": "Commercial Facilities; Communications; Critical Manufacturing; Information Technology",
+    "cve_ids": [
+      "CVE-2026-32645",
+      "CVE-2026-39460",
+      "CVE-2026-28745",
+      "CVE-2026-33367",
+      "CVE-2026-29797",
+      "CVE-2026-39453",
+      "CVE-2026-33272"
+    ],
+    "vendor": "Red Lion Controls",
+    "product": "N-Tron 700 Series",
+    "attack_ics_technique": {
+      "id": "T1694.002",
+      "name": "Insecure Credentials: Hardcoded Credentials",
+      "url": "https://attack.mitre.org/techniques/T1694/002/"
+    },
+    "exploit_maturity": "No known public exploitation reported in the advisory data provided",
+    "cvss_score": 8.3,
+    "ot_risk_rating": "High",
+    "ot_risk_rationale": "The affected product is an industrial Ethernet switch commonly deployed as control-network infrastructure (not typically air-gapped), and the combination of hardcoded/recoverable credentials, missing authentication, and authentication bypass flaws could allow an attacker with network access to gain administrative control over switching infrastructure, directly affecting availability and integrity of connected control traffic.",
+    "patch_status": "Not specified in the provided advisory data; consult CISA advisory ICSA-26-281-01 and Red Lion for firmware/bootloader updates beyond Firmware_3.11.0 / Bootloader_2.0.6.1.",
+    "known_mitigation": "Restrict network and physical access to switch management interfaces (web/console/CLI) to a dedicated, isolated management VLAN or jump host, disable any unused remote management services, and monitor for unauthorized configuration changes or login attempts on these switches.",
+    "mitigation_confidence": "suggested",
+    "purdue_level_estimate": "Typically Level 1-2, control network infrastructure (industrial Ethernet switching for field and supervisory control networks)",
+    "severity_tier": "high",
+    "advisory_row_id": "4067",
+    "source_url": "https://www.cisa.gov/news-events/ics-advisories/icsa-26-281-01",
+    "published": "10/8/2026",
+    "fetched_at": "2026-11-26T07:30:13.590983+00:00"
+  },
+  {
     "exec_headline": "A flaw in software used to program industrial touchscreen control panels could let an attacker who tricks an engineer into opening a malicious file gain control of that engineer's computer.",
     "business_impact": "If an attacker tricks a plant engineer into opening a rigged project file, they could take over the engineer's computer and potentially use that access to tamper with the configuration of equipment controlling manufacturing, energy, or water treatment processes, leading to downtime or unsafe conditions and costly recovery.",
     "sector": "Critical Manufacturing; Energy; Water and Wastewater Systems",
@@ -3911,35 +3945,5 @@
     "source_url": "https://www.cisa.gov/news-events/ics-advisories/icsa-26-176-06",
     "published": "6/25/2026",
     "fetched_at": "2026-07-07T19:44:25.428938+00:00"
-  },
-  {
-    "exec_headline": "A widely used electrical protection device sold by Schneider Electric has security flaws that could let an attacker crash the device or take unauthorized control of it.",
-    "business_impact": "If exploited, these flaws could cause a critical piece of power protection equipment to stop working correctly or be commandeered by an outside party, which could interrupt electrical service or endanger equipment and personnel relying on that protection.",
-    "sector": "Commercial Facilities; Critical Manufacturing; Energy",
-    "cve_ids": [
-      "CVE-2026-9716",
-      "CVE-2026-9717",
-      "CVE-2026-9718"
-    ],
-    "vendor": "Schneider Electric",
-    "product": "PowerLogic P7 (version 0.2.003.001.000)",
-    "attack_ics_technique": {
-      "id": "T0814",
-      "name": "Denial of Service",
-      "url": "https://collaborate.mitre.org/attackics/index.php/Technique/T0814"
-    },
-    "exploit_maturity": "No public exploitation reported in the advisory summary; proof-of-concept or in-the-wild exploitation status not stated.",
-    "cvss_score": 7.5,
-    "ot_risk_rating": "High",
-    "ot_risk_rationale": "The product is a protective relay whose failure or compromise directly affects electrical protection and switching safety functions; the CWE mix (null pointer dereference, reachable assertion, OS command injection) indicates both crash/denial-of-service potential and possible unauthorized command execution, and such relays are typically reachable from engineering or substation LANs even if not internet-facing, raising consequence and plausibility of exploitation despite no confirmed active exploitation.",
-    "patch_status": "Not specified in the provided advisory summary; consult the Schneider Electric/CISA advisory directly for patch or firmware update availability.",
-    "known_mitigation": "Restrict network and physical access to the relay's management/configuration interfaces to trusted engineering workstations only, place the device on a segmented protection-relay VLAN isolated from general IT/OT networks, disable any remote command-line or scripting interface not required for operation, and monitor for unexpected reboots, crashes, or anomalous command sequences pending vendor patch guidance.",
-    "mitigation_confidence": "suggested",
-    "purdue_level_estimate": "Typically Level 0/1 (protection and control layer) \u2014 protective relays like the PowerLogic P7 are commonly deployed directly on switchgear/substation control networks, per standard vendor deployment practice.",
-    "severity_tier": "high",
-    "advisory_row_id": "4796",
-    "source_url": "https://www.cisa.gov/news-events/ics-advisories/icsa-26-176-07",
-    "published": "6/25/2026",
-    "fetched_at": "2026-07-07T19:44:47.197052+00:00"
   }
 ]
